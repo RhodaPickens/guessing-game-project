@@ -5,6 +5,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+let numAttempts = 5;
 
 let randomInRange = (min, max) => {
   min = Math.ceil(min);   // rounds up to smallest integer greater than or equal to given number
@@ -35,12 +36,18 @@ let askGuess = () => {                    // asks player for guesses
 
   rl.question('Enter a guess: ', (answer) => {
     let number = Number(answer);
+    numAttempts--;
+
     if (checkGuess(number) === true) {
       console.log("You win!");
+      rl.close();
+    } else if (numAttempts === 0) {
+      console.log("You lose!");
       rl.close();
     } else {
       askGuess();
     }
+
   });
 }
 
@@ -57,4 +64,13 @@ let askRange = () => {                    // asks player for range of numbers
   });
 };
 
-askRange();
+let askLimit = () => {                    // asks player to specify number of attempts
+
+  rl.question("How many attempts would you like to have? Enter a number between 1 and 100: ", (userAttempts) => {
+    numAttempts = userAttempts;
+    askRange();
+  })
+
+};
+
+askLimit();
